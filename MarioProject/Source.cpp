@@ -2,6 +2,8 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include "Constants.h"
+#include "Texture2D.h"
+#include "Commons.h"
 #include <iostream>
 
 using namespace::std;
@@ -9,14 +11,14 @@ using namespace::std;
 //Globals
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
-SDL_Texture* gTexture = NULL;
+Texture2D* gTexture = NULL;
 //Function Prototypes
 bool InitSDL();
 void CloseSDL();
 bool Update();
 void Render();
-SDL_Texture* LoadTextureFromFile(string path);
-void FreeTexture();
+//SDL_Texture* LoadTextureFromFile(string path);
+//void FreeTexture();
 
 int main(int argc, char* args[])
 {
@@ -59,7 +61,7 @@ bool InitSDL()
 			cout << "Window was not created. Error: " << SDL_GetError();
 			return false;
 		}
-		//Image render stuff haha im jeff
+		//Image render stuff
 		gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 		if (gRenderer != NULL)
 		{
@@ -70,7 +72,11 @@ bool InitSDL()
 				cout << "SDL_Image could not intialise. Error: " << IMG_GetError();
 				return false;
 			}//Load background texture
-			gTexture = LoadTextureFromFile("images/test.bmp");
+			gTexture = new Texture2D(gRenderer);
+			if (!gTexture->LoadFromFile("images/test.bmp"))
+			{
+				return false;
+			}
 			if (gTexture == NULL)
 			{
 				return false;
@@ -89,20 +95,20 @@ bool InitSDL()
 	
 }
 
-void FreeTexture()
-{
-	//Check 
-	if (gTexture != NULL)
-	{
-		SDL_DestroyTexture(gTexture);
-		gTexture = NULL;
-	}
-}
+//void FreeTexture()
+//{
+//	//Check 
+//	if (gTexture != NULL)
+//	{
+//		SDL_DestroyTexture(gTexture);
+//		gTexture = NULL;
+//	}
+//}
 
 void CloseSDL() 
 {
 	//CLear up the the texture
-	FreeTexture();
+	//FreeTexture();
 
 	SDL_DestroyRenderer(gRenderer);
 	gRenderer = NULL;
@@ -114,48 +120,47 @@ void CloseSDL()
 	//Quit SDL subsystems.
 	IMG_Quit();
 	SDL_Quit();
+	//release the texture
+	delete gTexture;
+	gTexture = NULL;
 }
 
 void Render()
 {
 	//Clear the screen.
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(gRenderer);
 
-	//Set where to render texture
-	SDL_Rect renderLocation = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
-	//Render to screen 
-	SDL_RenderCopyEx(gRenderer, gTexture, NULL, &renderLocation, 0, NULL, SDL_FLIP_NONE);
+	gTexture->Render(Vector2D(0,0), SDL_FLIP_NONE);
 
 	//Update the screen
 	SDL_RenderPresent(gRenderer);
 
 }
 
-SDL_Texture* LoadTextureFromFile(string path)
-{
-	//Remove any memory used for preivosu textuer
-	FreeTexture();
-	SDL_Texture* pTexture = NULL;
-
-	//Load the image
-	SDL_Surface* pSurface = IMG_Load(path.c_str());
-	if (pSurface != NULL)
-	{
-		pTexture = SDL_CreateTextureFromSurface(gRenderer, pSurface);
-		if (pTexture == NULL)
-		{
-			cout << "unable to create texture from surface. Error " << SDL_GetError() << endl;
-		}
-		SDL_FreeSurface(pSurface);
-	}
-	else
-	{
-		cout << "Unable to create textuer from surface. Error: " << IMG_GetError() << endl;
-	}
-	return pTexture;
-}
+//SDL_Texture* LoadTextureFromFile(string path)
+//{
+//	//Remove any memory used for preivosu textuer
+//	FreeTexture();
+//	SDL_Texture* pTexture = NULL;
+//
+//	//Load the image
+//	SDL_Surface* pSurface = IMG_Load(path.c_str());
+//	if (pSurface != NULL)
+//	{
+//		pTexture = SDL_CreateTextureFromSurface(gRenderer, pSurface);
+//		if (pTexture == NULL)
+//		{
+//			cout << "unable to create texture from surface. Error " << SDL_GetError() << endl;
+//		}
+//		SDL_FreeSurface(pSurface);
+//	}
+//	else
+//	{
+//		cout << "Unable to create textuer from surface. Error: " << IMG_GetError() << endl;
+//	}
+//	return pTexture;
+//}
 
 bool Update()
 {
