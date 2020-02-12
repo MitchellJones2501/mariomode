@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Texture2D.h"
 #include "Commons.h"
+#include "GameScreenManager.h"
 #include <iostream>
 
 using namespace::std;
@@ -12,11 +13,13 @@ using namespace::std;
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 Texture2D* gTexture = NULL;
+GameScreenManager* gameScreenManager;
+Uint32 gOldTime;
 //Function Prototypes
 bool InitSDL();
 void CloseSDL();
 bool Update();
-void Render();
+//void Render();
 //SDL_Texture* LoadTextureFromFile(string path);
 //void FreeTexture();
 
@@ -30,7 +33,7 @@ int main(int argc, char* args[])
 		//Game Loop.
 		while (!quit)
 		{
-			Render();
+			/*Render();*/
 			quit = Update();
 		}
 	}
@@ -51,7 +54,7 @@ bool InitSDL()
 	}
 	else
 	{
-		//All good, so attemp to create the window.
+		//All good, so attempt to create the window.
 		gWindow = SDL_CreateWindow("Games Engine Creation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_HEIGHT, SCREEN_WIDTH, SDL_WINDOW_SHOWN);
 
 		//Did the window get created?
@@ -61,36 +64,39 @@ bool InitSDL()
 			cout << "Window was not created. Error: " << SDL_GetError();
 			return false;
 		}
-		//Image render stuff
-		gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-		if (gRenderer != NULL)
-		{
-			//Initialise PNG Loading.
-			int imageFlags = IMG_INIT_PNG;
-			if (!(IMG_Init(imageFlags) & imageFlags))
-			{
-				cout << "SDL_Image could not intialise. Error: " << IMG_GetError();
-				return false;
-			}//Load background texture
-			gTexture = new Texture2D(gRenderer);
-			if (!gTexture->LoadFromFile("images/test.bmp"))
-			{
-				return false;
-			}
-			if (gTexture == NULL)
-			{
-				return false;
-			}
-			
-			
-			
-		}
-		else
-		{
-			cout << "Renderer could not intialise. Error: " << SDL_GetError();
-			return false;
-		}
+	//	//Image render stuff
+	//	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+	//	if (gRenderer != NULL)
+	//	{
+	//		//Initialise PNG Loading.
+	//		int imageFlags = IMG_INIT_PNG;
+	//		if (!(IMG_Init(imageFlags) & imageFlags))
+	//		{
+	//			cout << "SDL_Image could not intialise. Error: " << IMG_GetError();
+	//			return false;
+	//		}//Load background texture
+	//		gTexture = new Texture2D(gRenderer);
+	//		if (!gTexture->LoadFromFile("images/test.bmp"))
+	//		{
+	//			return false;
+	//		}
+	//		if (gTexture == NULL)
+	//		{
+	//			return false;
+	//		}
+	//		
+	//		
+	//		
+	//	}
+	//	else
+	//	{
+	//		cout << "Renderer could not intialise. Error: " << SDL_GetError();
+	//		return false;
+	//	}
 		return true;
+
+		gameScreenManager = new GameScreenManager(gRenderer, SCREEN_LEVEL1);
+		gOldTime = SDL_GetTicks();
 	}
 	
 }
@@ -105,7 +111,7 @@ bool InitSDL()
 //	}
 //}
 
-void CloseSDL() 
+void CloseSDL()
 {
 	//CLear up the the texture
 	//FreeTexture();
@@ -120,9 +126,12 @@ void CloseSDL()
 	//Quit SDL subsystems.
 	IMG_Quit();
 	SDL_Quit();
-	//release the texture
-	delete gTexture;
-	gTexture = NULL;
+
+	delete gameScreenManager;
+	gameScreenManager = NULL;
+	////release the texture
+	//delete gTexture;
+	//gTexture = NULL;
 }
 
 void Render()
@@ -131,7 +140,7 @@ void Render()
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(gRenderer);
 
-	gTexture->Render(Vector2D(0,0), SDL_FLIP_NONE);
+	gameScreenManager->Render();
 
 	//Update the screen
 	SDL_RenderPresent(gRenderer);
@@ -164,6 +173,7 @@ void Render()
 
 bool Update()
 {
+	Uint32 newTime = SDL_GetTicks();
 	//Event Handler.
 	SDL_Event e;
 
@@ -176,7 +186,11 @@ bool Update()
 		//Click the 'X' to quit.
 	case SDL_QUIT:
 		return true;
-	break;
+		break;
 	}
+
+	gameScreenManager->Update((float)(newTime - gOldTime) / 100.0f, e);
+	gOldTime = newTime;
+
 	return false;
 }
