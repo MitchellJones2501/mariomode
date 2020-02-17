@@ -93,10 +93,11 @@ bool InitSDL()
 	//		cout << "Renderer could not intialise. Error: " << SDL_GetError();
 	//		return false;
 	//	}
-		return true;
+		
 
 		gameScreenManager = new GameScreenManager(gRenderer, SCREEN_LEVEL1);
 		gOldTime = SDL_GetTicks();
+		return true;
 	}
 	
 }

@@ -8,7 +8,7 @@
 GameScreenManager::GameScreenManager(SDL_Renderer* renderer, SCREENS startScreen)
 {
     mRenderer = renderer;
-    GameScreen* mCurrentScreen = NULL;
+    mCurrentScreen = NULL;
     ChangeScreen(startScreen);
 }
 

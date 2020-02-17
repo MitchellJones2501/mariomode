@@ -1,3 +1,5 @@
 ﻿  GameScreenManager.cpp
-C:\Users\Windows 10\Documents\GitHub\mariomode\MarioProject\GameScreenManager.cpp(50,55): error C2440: '=': cannot convert from 'GameScreenLevel1 *' to 'GameScreenManager *'
-C:\Users\Windows 10\Documents\GitHub\mariomode\MarioProject\GameScreenManager.cpp(50,45): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+  Source.cpp
+  Texture2D.cpp
+  Generating Code...
+  MarioProject.vcxproj -> C:\Users\j013015j\Documents\GitHub\mariomode\Debug\MarioProject.exe

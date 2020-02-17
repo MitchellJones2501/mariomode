@@ -1,12 +1,15 @@
 #pragma once
 #include "SDL.h"
+#include "GameScreen.h"
 #include "Commons.h"
+
+class GameScreen;
 
 class GameScreenManager
 {
 private:
 	SDL_Renderer* mRenderer;
-	GameScreenManager* mCurrentScreen;
+	GameScreen* mCurrentScreen;
 
 public:
 	GameScreenManager(SDL_Renderer* renderer, SCREENS startScreen);
