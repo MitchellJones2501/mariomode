@@ -24,8 +24,8 @@ public:
 	int GetWidth() { return mWidth; }
 	int GetHeight() { return mHeight; }
 private:
-	SDL_Renderer* mRenderer;
-	SDL_Texture* mTexture;
+	SDL_Renderer* mRenderer = NULL;
+	SDL_Texture* mTexture = NULL;
 
 	int mWidth;
 	int mHeight;

@@ -24,6 +24,8 @@ void GameScreenLevel1::Render()
 }
 bool GameScreenLevel1::SetUpLevel()
 {
+	mBackgroundTexture = new Texture2D(mRenderer);
+
 	//load the background texture
 	if (!mBackgroundTexture->LoadFromFile("Images/Test.bmp"))
 	{

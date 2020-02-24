@@ -18,10 +18,12 @@ bool Texture2D::LoadFromFile(string path)
 
 	//Load the image
 	SDL_Surface* pSurface = IMG_Load(path.c_str());
-	mWidth = pSurface->w;
-	mHeight = pSurface->h;
+	
+
 	if (pSurface != NULL)
 	{
+		mWidth = pSurface->w;
+		mHeight = pSurface->h;
 		mTexture = SDL_CreateTextureFromSurface(mRenderer, pSurface);
 		if (mTexture == NULL)
 		{

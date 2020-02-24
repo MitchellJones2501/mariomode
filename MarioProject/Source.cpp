@@ -19,7 +19,7 @@ Uint32 gOldTime;
 bool InitSDL();
 void CloseSDL();
 bool Update();
-//void Render();
+void Render();
 //SDL_Texture* LoadTextureFromFile(string path);
 //void FreeTexture();
 
@@ -33,7 +33,7 @@ int main(int argc, char* args[])
 		//Game Loop.
 		while (!quit)
 		{
-			/*Render();*/
+			Render();
 			quit = Update();
 		}
 	}
@@ -65,7 +65,7 @@ bool InitSDL()
 			return false;
 		}
 	//	//Image render stuff
-	//	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+		gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 	//	if (gRenderer != NULL)
 	//	{
 	//		//Initialise PNG Loading.
