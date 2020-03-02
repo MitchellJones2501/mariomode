@@ -5,11 +5,17 @@ struct Vector2D
 	float X;
 	float Y;
 
-	Vector2D(float x, float y)
+	Vector2D()
 
 	{
-		X = x;
-		Y = y;
+		X = 0.0f;
+		Y = 0.0f;
+	}
+
+	Vector2D(float initx, float inity)
+	{
+		X = initx;
+		Y = inity;
 	}
 };
 
